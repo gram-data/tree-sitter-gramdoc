@@ -170,6 +170,29 @@ The host grammar exposes `/** ... */` as a single node (e.g. `doc_comment` in tr
 
 The injected content must be the whole comment including `/**` and `*/`. Editors without injection support still see an ordinary comment.
 
+## Install
+
+```sh
+# Node (native binding; builds with node-gyp if no prebuild matches)
+npm install @gram-data/tree-sitter-gramdoc tree-sitter
+
+# Rust
+cargo add tree-sitter-gramdoc
+```
+
+```js
+const Parser = require("tree-sitter");
+const parser = new Parser();
+parser.setLanguage(require("@gram-data/tree-sitter-gramdoc"));
+```
+
+```rust
+let mut parser = tree_sitter::Parser::new();
+parser.set_language(&tree_sitter_gramdoc::LANGUAGE.into())?;
+```
+
+The npm package is `@gram-data/tree-sitter-gramdoc`; the crate is `tree-sitter-gramdoc`.
+
 ## Queries
 
 - `queries/highlights.scm`: name, tag keywords, property names, aliases, reference targets, descriptions.
@@ -181,6 +204,7 @@ The injected content must be the whole comment including `/**` and `*/`. Editors
 npm install
 npx tree-sitter generate
 npx tree-sitter test
+node --test bindings/node/*_test.js
 cargo test
 ```
 

@@ -7,7 +7,7 @@
 // Text that runs to the end of the line, stopping before a closing `*/`.
 const LINE = /[^\s*]([^\n*]|\*[^\/\n])*/;
 
-export default grammar({
+module.exports = grammar({
   name: 'gramdoc',
 
   externals: $ => [

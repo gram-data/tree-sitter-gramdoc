@@ -1,34 +1,63 @@
 {
-  "name": "tree-sitter-gramdoc",
-  "version": "0.1.0",
+  "name": "@gram-data/tree-sitter-gramdoc",
+  "version": "0.2.0",
   "description": "Tree-sitter grammar for gramdoc structured documentation comments in gram",
-  "type": "module",
-  "license": "MIT",
-  "author": {
-    "name": "Andreas Kollegger",
-    "email": "andreas.kollegger@neo4j.com"
-  },
+  "homepage": "https://github.com/gram-data/tree-sitter-gramdoc",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gram-data/tree-sitter-gramdoc.git"
   },
+  "bugs": {
+    "url": "https://github.com/gram-data/tree-sitter-gramdoc/issues"
+  },
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "scripts": {
+    "install": "node-gyp-build",
+    "build": "tree-sitter generate",
+    "prebuildify": "prebuildify --napi --strip",
+    "test": "tree-sitter test && node --test bindings/node/*_test.js"
+  },
   "keywords": [
     "tree-sitter",
-    "gramdoc",
+    "parser",
     "gram",
-    "parser"
+    "gramdoc",
+    "documentation",
+    "comments"
   ],
   "files": [
     "grammar.js",
     "tree-sitter.json",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
     "queries/*",
     "src/**"
   ],
-  "scripts": {
-    "build": "tree-sitter generate",
-    "test": "tree-sitter test"
+  "author": {
+    "name": "Andreas Kollegger",
+    "email": "andreas.kollegger@neo4j.com"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
   },
   "devDependencies": {
+    "prebuildify": "^6.0.1",
+    "tree-sitter": "^0.25.0",
     "tree-sitter-cli": "^0.26.5"
   }
 }

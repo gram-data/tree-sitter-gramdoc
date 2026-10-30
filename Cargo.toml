@@ -1,14 +1,17 @@
 [package]
 name = "tree-sitter-gramdoc"
 description = "Structured documentation comments for gram"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Andreas Kollegger <andreas.kollegger@neo4j.com>"]
 license = "MIT"
 keywords = ["incremental", "parsing", "tree-sitter", "gramdoc", "gram"]
-categories = ["parser-implementations", "parsing", "text-editors"]
+categories = ["parsing", "text-editors"]
+readme = "README.md"
+homepage = "https://github.com/gram-data/tree-sitter-gramdoc"
 repository = "https://github.com/gram-data/tree-sitter-gramdoc"
 edition = "2021"
 autoexamples = false
+publish = true
 
 build = "bindings/rust/build.rs"
 include = [
@@ -16,7 +19,10 @@ include = [
   "grammar.js",
   "queries/*",
   "src/*",
+  "src/tree_sitter/*",
   "tree-sitter.json",
+  "/README.md",
+  "/LICENSE",
 ]
 
 [lib]

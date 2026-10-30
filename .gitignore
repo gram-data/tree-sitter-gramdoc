@@ -8,3 +8,4 @@ prebuilds/
 *.dylib
 *.dll
 .DS_Store
+*.tgz
