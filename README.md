@@ -75,15 +75,15 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 
 | Form | Meaning |
 |------|---------|
-| `1` | exactly one |
-| `?` | zero or one |
-| `+` | one or more |
+| `n` | exactly n (any integer: `1`, `3`, `10`) |
+| `n..m` | between n and m, inclusive |
+| `n..` | at least n |
+| `..m` | at most m (minimum 0) |
+| `?` | zero or one (same as `..1`) |
+| `+` | one or more (same as `1..`) |
 | `*` | zero or more (unconstrained) |
-| `{n}` | exactly n |
-| `{n,m}` | between n and m |
-| `{n,}` | at least n |
 
-Braces take digits only, with no spaces (`{2,5}`, not `{2, 5}`). The grammar does not check `n <= m`. The description after it is optional.
+Digits are unsigned integers, and there are no spaces around `..` (`2..5`, not `2 .. 5`). The grammar only recognises the form: `5..2` still parses, and checking `n <= m` is left to lint. The description after the cardinality is optional.
 
 **Semantics.** The cardinality at an end is the number of relationships of this kind *per node at that end*, not the number of nodes at the other end. This matches the end `count` / `min_count` / `max_count` of the [Neo4j ontology-graph-spec](https://github.com/neo4j/ontology-graph-spec) relationship (`@source` is `from`, `@target` is `to`), and is the **reverse of UML multiplicity**. For `[:ACTED_IN | person, movie]`:
 
@@ -98,7 +98,7 @@ Braces take digits only, with no spaces (`{2,5}`, not `{2, 5}`). The grammar doe
 
 `@target +` is `to: {node: movie, min_count: 1}` in the ontology spec.
 
-The first token after `@source` or `@target` is always the cardinality; the description is whatever follows it, so a description may start with punctuation (`@source 1 (the author) ...`). A cardinality directly followed by text with no space (`1st`) is read as `1` plus description `st`.
+The first token after `@source` or `@target` is always the cardinality; the description is whatever follows it, so a description may start with punctuation (`@source 1 (the author) ...`). Matching is greedy and needs no space after the cardinality, so `1st` is `1` plus description `st`, and `1..5th` is `1..5` plus `th`. To start a description with a dot or digits, put a space after the cardinality (`@source 1 ...and more`, `@source + 2 people`).
 
 Tag descriptions continue over following lines until the next `@` tag or the end of the comment. Tags have no `{type}` and no `-` separator.
 

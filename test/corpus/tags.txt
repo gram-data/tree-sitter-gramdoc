@@ -431,7 +431,7 @@ Cardinality is separate from a punctuated description
 
 /**
  * @source 1 (the author) writes it.
- * @target {1,2}: see notes
+ * @target ..2: see notes
  */
 
 --------------------------------------------------------------------------------
