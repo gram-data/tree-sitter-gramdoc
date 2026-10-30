@@ -69,6 +69,7 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 | `@element [description]` | `element_tag` | Repeatable. The nth `@element` documents the nth element, by order of appearance; there is no addressing token. A count mismatch is not a parse error. Field: `description`. |
 | `@source <cardinality> [description]` | `source_tag` | Source end of a relationship `[r \| source, target]`. Fields: `cardinality` (`cardinality`), `description`. |
 | `@target <cardinality> [description]` | `target_tag` | Target end of a relationship. Same shape as `@source`. |
+| `@self` | `self_tag` | Bare marker: relationships of this kind must be self-loops. No argument, no description. |
 | `@<other> [description]` | `unknown_tag` | Any other tag. Fields: `name` (`tag_name`, includes the `@`), `description`. |
 
 **Cardinality** is one of:
@@ -101,6 +102,20 @@ Digits are unsigned integers, and there are no spaces around `..` (`2..5`, not `
 The first token after `@source` or `@target` is always the cardinality; the description is whatever follows it, so a description may start with punctuation (`@source 1 (the author) ...`). Matching is greedy and needs no space after the cardinality, so `1st` is `1` plus description `st`, and `1..5th` is `1..5` plus `th`. To start a description with a dot or digits, put a space after the cardinality (`@source 1 ...and more`, `@source + 2 people`).
 
 Tag descriptions continue over following lines until the next `@` tag or the end of the comment. Tags have no `{type}` and no `-` separator.
+
+**Self-loops.** `@self` says relationships of this kind MUST be self-loops: source and target are the same node. Its absence says nothing; loops are neither required nor forbidden. A loop counts at both ends for its one node, so cardinalities on `@source` and `@target` still apply to it (a node with one loop has one relationship at its source end and one at its target end). `@self` is a bare marker: text after it on the same line is a parse error rather than being ignored, and `@selfish` is an ordinary unknown tag. It may appear anywhere in the tag list, in any order, and repeating it is allowed (redundant, not an error). Rules that loops are forbidden, and symmetry, are not expressible.
+
+```gram
+/**
+ * SAME_AS
+ *
+ * @label SAME_AS
+ * @self
+ * @source ? A person has at most one SAME_AS loop.
+ * @target ..1 Likewise at the other end.
+ */
+[:SAME_AS | (p:Person), (p)]
+```
 
 ### More examples
 

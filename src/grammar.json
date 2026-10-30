@@ -110,6 +110,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "self_tag"
+        },
+        {
+          "type": "SYMBOL",
           "name": "reference_tag"
         },
         {
@@ -349,6 +353,10 @@
           ]
         }
       ]
+    },
+    "self_tag": {
+      "type": "STRING",
+      "value": "@self"
     },
     "unknown_tag": {
       "type": "SEQ",

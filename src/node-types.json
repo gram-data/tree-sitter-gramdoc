@@ -72,6 +72,10 @@
           "named": true
         },
         {
+          "type": "self_tag",
+          "named": true
+        },
+        {
           "type": "source_tag",
           "named": true
         },
@@ -351,6 +355,10 @@
   },
   {
     "type": "reference_target",
+    "named": true
+  },
+  {
+    "type": "self_tag",
     "named": true
   },
   {

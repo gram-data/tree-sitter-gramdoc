@@ -44,6 +44,7 @@ export default grammar({
       $.element_tag,
       $.source_tag,
       $.target_tag,
+      $.self_tag,
       $.reference_tag,
       $.unknown_tag,
     ),
@@ -100,6 +101,9 @@ export default grammar({
       field('cardinality', $.cardinality),
       optional(field('description', $.tag_description)),
     ),
+
+    // @self: bare marker, no argument or description
+    self_tag: _ => '@self',
 
     // @anything <description>
     unknown_tag: $ => seq(

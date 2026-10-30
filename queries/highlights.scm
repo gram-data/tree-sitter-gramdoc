@@ -9,6 +9,7 @@
 "@element" @keyword
 "@source" @keyword
 "@target" @keyword
+(self_tag) @keyword
 "@reference" @keyword
 (tag_name) @keyword
 
