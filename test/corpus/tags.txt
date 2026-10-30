@@ -199,3 +199,150 @@ Single-line tag
     name: (identifier)
     description: (tag_description
       (description_line))))
+
+================================================================================
+Label tag
+================================================================================
+
+/**
+ * @label Person A human individual.
+ * @label Employee
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (label_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line)))
+  (label_tag
+    name: (identifier)))
+
+================================================================================
+Elements and element tags
+================================================================================
+
+/**
+ * A team.
+ *
+ * @elements The people on the team,
+ *   in seniority order.
+ * @element The team lead.
+ * @element
+ * @element A member.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (elements_tag
+    description: (tag_description
+      (description_line)
+      (description_line)))
+  (element_tag
+    description: (tag_description
+      (description_line)))
+  (element_tag)
+  (element_tag
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Elements is not confused with element
+================================================================================
+
+/** @elements All of them. */
+
+--------------------------------------------------------------------------------
+
+(document
+  (elements_tag
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Relationship source and target
+================================================================================
+
+/**
+ * KNOWS
+ *
+ * A person knows another person.
+ *
+ * @label KNOWS
+ * @source 1..* Each :KNOWS may start at one or more people.
+ * @target 0..1 Each :KNOWS ends at
+ *   at most one person.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    name: (identifier))
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)
+      (description_line))))
+
+================================================================================
+Cardinality forms
+================================================================================
+
+/**
+ * @source 1 One.
+ * @source 0..1 Optional.
+ * @source 1..* At least one.
+ * @source * Any number.
+ * @target 2..5 Between two and five.
+ * @target *
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)))
+
+================================================================================
+Single-line source with cardinality only
+================================================================================
+
+/** @source 1 */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)))

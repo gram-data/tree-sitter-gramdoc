@@ -86,7 +86,27 @@
         },
         {
           "type": "SYMBOL",
+          "name": "label_tag"
+        },
+        {
+          "type": "SYMBOL",
           "name": "alias_tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "elements_tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "element_tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "source_tag"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "target_tag"
         },
         {
           "type": "SYMBOL",
@@ -104,6 +124,39 @@
         {
           "type": "STRING",
           "value": "@property"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "label_tag": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@label"
         },
         {
           "type": "FIELD",
@@ -181,6 +234,122 @@
         }
       ]
     },
+    "elements_tag": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@elements"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "element_tag": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@element"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "source_tag": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@source"
+        },
+        {
+          "type": "FIELD",
+          "name": "cardinality",
+          "content": {
+            "type": "SYMBOL",
+            "name": "cardinality"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "target_tag": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@target"
+        },
+        {
+          "type": "FIELD",
+          "name": "cardinality",
+          "content": {
+            "type": "SYMBOL",
+            "name": "cardinality"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "description",
+              "content": {
+                "type": "SYMBOL",
+                "name": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
     "unknown_tag": {
       "type": "SEQ",
       "members": [
@@ -220,6 +389,17 @@
     "identifier": {
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
+    },
+    "cardinality": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[0-9]+(\\.\\.([0-9]+|\\*))?|\\*"
+        }
+      }
     },
     "alias": {
       "type": "PATTERN",

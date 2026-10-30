@@ -4,11 +4,18 @@
 ; Tag keywords
 "@property" @keyword
 "@alias" @keyword
+"@label" @keyword
+"@elements" @keyword
+"@element" @keyword
+"@source" @keyword
+"@target" @keyword
 "@reference" @keyword
 (tag_name) @keyword
 
 ; Tag arguments
 (property_tag name: (identifier) @variable.parameter)
+(label_tag name: (identifier) @type)
+(cardinality) @number
 (alias) @string
 (reference_target) @string.special
 

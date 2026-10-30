@@ -38,7 +38,12 @@ export default grammar({
 
     _tag: $ => choice(
       $.property_tag,
+      $.label_tag,
       $.alias_tag,
+      $.elements_tag,
+      $.element_tag,
+      $.source_tag,
+      $.target_tag,
       $.reference_tag,
       $.unknown_tag,
     ),
@@ -46,6 +51,13 @@ export default grammar({
     // @property <name> <description>
     property_tag: $ => seq(
       '@property',
+      field('name', $.identifier),
+      optional(field('description', $.tag_description)),
+    ),
+
+    // @label <name> <description>
+    label_tag: $ => seq(
+      '@label',
       field('name', $.identifier),
       optional(field('description', $.tag_description)),
     ),
@@ -63,6 +75,32 @@ export default grammar({
       optional(field('description', $.tag_description)),
     ),
 
+    // @elements <description>: the sequence of pattern elements as a whole
+    elements_tag: $ => seq(
+      '@elements',
+      optional(field('description', $.tag_description)),
+    ),
+
+    // @element <description>: repeatable, the nth documents the nth element
+    element_tag: $ => seq(
+      '@element',
+      optional(field('description', $.tag_description)),
+    ),
+
+    // @source <cardinality> <description>
+    source_tag: $ => seq(
+      '@source',
+      field('cardinality', $.cardinality),
+      optional(field('description', $.tag_description)),
+    ),
+
+    // @target <cardinality> <description>
+    target_tag: $ => seq(
+      '@target',
+      field('cardinality', $.cardinality),
+      optional(field('description', $.tag_description)),
+    ),
+
     // @anything <description>
     unknown_tag: $ => seq(
       field('name', $.tag_name),
@@ -72,6 +110,10 @@ export default grammar({
     tag_description: $ => repeat1($.description_line),
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    // 1, 0..1, 1..*, *, n..m. Higher precedence so a bare `*` is not
+    // consumed as the leading-asterisk extra.
+    cardinality: _ => token(prec(1, /[0-9]+(\.\.([0-9]+|\*))?|\*/)),
 
     alias: _ => LINE,
 

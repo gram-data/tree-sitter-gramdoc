@@ -4,6 +4,9 @@
 ; Documented properties
 (property_tag name: (identifier) @name) @definition.property
 
+; Documented labels
+(label_tag name: (identifier) @name) @definition.label
+
 ; Aliases
 (alias_tag value: (alias) @name) @definition.alias
 

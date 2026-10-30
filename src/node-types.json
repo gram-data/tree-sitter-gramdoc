@@ -48,6 +48,18 @@
           "named": true
         },
         {
+          "type": "element_tag",
+          "named": true
+        },
+        {
+          "type": "elements_tag",
+          "named": true
+        },
+        {
+          "type": "label_tag",
+          "named": true
+        },
+        {
           "type": "name",
           "named": true
         },
@@ -60,10 +72,76 @@
           "named": true
         },
         {
+          "type": "source_tag",
+          "named": true
+        },
+        {
+          "type": "target_tag",
+          "named": true
+        },
+        {
           "type": "unknown_tag",
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "element_tag",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "tag_description",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "elements_tag",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "tag_description",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "label_tag",
+    "named": true,
+    "fields": {
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "tag_description",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -119,6 +197,32 @@
     }
   },
   {
+    "type": "source_tag",
+    "named": true,
+    "fields": {
+      "cardinality": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "cardinality",
+            "named": true
+          }
+        ]
+      },
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "tag_description",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "tag_description",
     "named": true,
     "fields": {},
@@ -131,6 +235,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "target_tag",
+    "named": true,
+    "fields": {
+      "cardinality": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "cardinality",
+            "named": true
+          }
+        ]
+      },
+      "description": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "tag_description",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -172,6 +302,18 @@
     "named": false
   },
   {
+    "type": "@element",
+    "named": false
+  },
+  {
+    "type": "@elements",
+    "named": false
+  },
+  {
+    "type": "@label",
+    "named": false
+  },
+  {
     "type": "@property",
     "named": false
   },
@@ -180,7 +322,19 @@
     "named": false
   },
   {
+    "type": "@source",
+    "named": false
+  },
+  {
+    "type": "@target",
+    "named": false
+  },
+  {
     "type": "alias",
+    "named": true
+  },
+  {
+    "type": "cardinality",
     "named": true
   },
   {
