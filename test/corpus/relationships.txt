@@ -1,0 +1,562 @@
+================================================================================
+KNOWS, symmetric social tie [:KNOWS | (a:Person), (b:Person)]
+================================================================================
+
+/**
+ * KNOWS
+ *
+ * Two people are acquainted. Direction carries no meaning; it only records
+ * which person introduced the link.
+ *
+ * @label KNOWS
+ * @alias ACQUAINTED_WITH
+ * @reference https://schema.org/knows Equivalent property in schema.org.
+ * @elements The two acquainted people.
+ * @element The person who recorded the acquaintance.
+ * @element The person who is known.
+ * @source * A person may start any number of KNOWS relationships.
+ * @target * A person may be the end of any number of KNOWS relationships.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line)
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (reference_tag
+    (reference_target)
+    (tag_description
+      (description_line)))
+  (elements_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+FOLLOWS, directed [:FOLLOWS | (follower:Person), (followed:Person)]
+================================================================================
+
+/**
+ * FOLLOWS
+ *
+ * A person subscribes to updates from another person.
+ *
+ * @label FOLLOWS
+ * @alias SUBSCRIBES_TO
+ * @property since When the subscription started.
+ * @source * A person may follow any number of people.
+ * @target * A person may be followed by any number of people,
+ *   including nobody.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line))))
+
+================================================================================
+FRIEND_OF with a since property [:FRIEND_OF {since: date} | (a:Person), (b:Person)]
+================================================================================
+
+/**
+ * FRIEND_OF
+ *
+ * Mutual friendship, recorded once per pair of people.
+ *
+ * @label FRIEND_OF
+ * @alias FRIENDS_WITH
+ * @alias BEFRIENDS
+ * @property since The date the friendship began.
+ * @property closeness How close the friends are,
+ *   from 1 (casual) to 5 (inseparable).
+ * @source * Each person may be the first-named friend in any number of
+ *   friendships.
+ * @target * Each person may be the second-named friend in any number of
+ *   friendships.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (alias_tag
+    (alias))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line))))
+
+================================================================================
+PARENT_OF, at most two parents per child [:PARENT_OF | (parent:Person), (child:Person)]
+================================================================================
+
+/**
+ * PARENT_OF
+ *
+ * A person is recorded as a parent of another person.
+ *
+ * @label PARENT_OF
+ * @alias HAS_CHILD
+ * @reference https://schema.org/parent
+ * @source * A person may be recorded as parent of any number of children.
+ * @target ..2 A child has at most two recorded parents, so at most two
+ *   incoming PARENT_OF relationships end at any one person.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (reference_tag
+    (reference_target))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line))))
+
+================================================================================
+MARRIED_TO, at most one marriage per end [:MARRIED_TO | (a:Person), (b:Person)]
+================================================================================
+
+/**
+ * MARRIED_TO
+ *
+ * Two people are married to each other.
+ *
+ * @label MARRIED_TO
+ * @alias SPOUSE_OF
+ * @property date The wedding date.
+ * @source ? A person starts at most one MARRIED_TO relationship.
+ * @target ..1 A person is the end of at most one MARRIED_TO relationship.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+SIBLING_OF [:SIBLING_OF | (a:Person), (b:Person)]
+================================================================================
+
+/**
+ * SIBLING_OF
+ *
+ * Two people share at least one parent.
+ *
+ * @label SIBLING_OF
+ * @alias BROTHER_OR_SISTER_OF
+ * @elements The siblings, in no particular order.
+ * @element One sibling.
+ * @element The other sibling.
+ * @source * A person may be the first-named sibling in any number of
+ *   relationships, one per sibling.
+ * @target * Likewise for the second-named sibling.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (elements_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+WORKS_FOR, exactly one employer [:WORKS_FOR {role: string, start_date: date} | (employee:Person), (employer:Person)]
+================================================================================
+
+/**
+ * WORKS_FOR
+ *
+ * A person is employed by another person, for example a sole trader.
+ *
+ * @label WORKS_FOR
+ * @alias EMPLOYED_BY
+ * @reference https://schema.org/employee Employment in schema.org.
+ * @property role The job title held.
+ * @property start_date The first day of employment.
+ * @source 1 Every person has exactly one current employer, so exactly one
+ *   outgoing WORKS_FOR relationship starts at each person.
+ * @target * An employer may have any number of employees.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (reference_tag
+    (reference_target)
+    (tag_description
+      (description_line)))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+WORKS_FOR, several jobs [:WORKS_FOR {role: string, start_date: date} | (employee:Person), (employer:Person)]
+================================================================================
+
+/**
+ * WORKS_FOR
+ *
+ * Variant for people who hold several jobs at once.
+ *
+ * @label WORKS_FOR
+ * @property role The job title held.
+ * @property start_date The first day of employment.
+ * @source 1..3 A person holds between one and three jobs.
+ * @target * An employer may have any number of employees.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+WORKS_FOR, at least one job [:WORKS_FOR | (employee:Person), (employer:Person)]
+================================================================================
+
+/**
+ * WORKS_FOR
+ *
+ * @source + Every person has at least one job (same as 1..).
+ * @target 0.. An employer may have no employees yet.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+REPORTS_TO, at most one manager [:REPORTS_TO | (report:Person), (manager:Person)]
+================================================================================
+
+/**
+ * REPORTS_TO
+ *
+ * A person reports to a manager.
+ *
+ * @label REPORTS_TO
+ * @alias MANAGED_BY
+ * @property since When the reporting line started.
+ * @source ..1 Each person has at most one manager, so at most one
+ *   outgoing REPORTS_TO relationship starts at them. The head of the
+ *   organisation has none.
+ * @target * A manager may have any number of direct reports.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line)
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+COLLEAGUE_OF [:COLLEAGUE_OF | (a:Person), (b:Person)]
+================================================================================
+
+/**
+ * COLLEAGUE_OF
+ *
+ * Two people work in the same organisation.
+ *
+ * @label COLLEAGUE_OF
+ * @alias WORKS_WITH
+ * @reference https://schema.org/colleague
+ * @elements The colleagues.
+ * @element A colleague.
+ * @element Another colleague.
+ * @source * A person may have any number of colleagues.
+ * @target * Likewise at the other end.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (label_tag
+    (identifier))
+  (alias_tag
+    (alias))
+  (reference_tag
+    (reference_target))
+  (elements_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (element_tag
+    (tag_description
+      (description_line)))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+French context variant [:French {name: "parent de"} | PARENT_OF]
+================================================================================
+
+/**
+ * Un lien de parenté.
+ *
+ * @label PARENT_OF Un parent d'une personne.
+ * @alias A_POUR_ENFANT
+ * @source * Une personne peut être le parent d'un nombre quelconque
+ *   d'enfants.
+ * @target ..2 Un enfant a au plus deux parents enregistrés.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (label_tag
+    (identifier)
+    (tag_description
+      (description_line)))
+  (alias_tag
+    (alias))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Source without target [:MENTORS | (mentor:Person), (mentee:Person)]
+================================================================================
+
+/**
+ * MENTORS
+ *
+ * @source ..5 A mentor guides at most five mentees.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Source and target on a non-relationship (:Person)
+================================================================================
+
+/**
+ * Person
+ *
+ * Not a relationship, but the tags still parse.
+ *
+ * @source 3 Meaningless here.
+ * @target 2..4 Also meaningless here.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (source_tag
+    (cardinality)
+    (tag_description
+      (description_line)))
+  (target_tag
+    (cardinality)
+    (tag_description
+      (description_line))))

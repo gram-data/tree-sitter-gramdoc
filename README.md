@@ -102,6 +102,46 @@ The first token after `@source` or `@target` is always the cardinality; the desc
 
 Tag descriptions continue over following lines until the next `@` tag or the end of the comment. Tags have no `{type}` and no `-` separator.
 
+### More examples
+
+Cardinality always counts relationships of this kind per node at that end, so the same
+numbers can read backwards at first. More cases live in `test/corpus/relationships.txt`.
+
+```gram
+// Each child has at most two recorded parents: at most two incoming
+// PARENT_OF relationships end at any one person, hence `..2` on the target.
+/**
+ * PARENT_OF
+ *
+ * @label PARENT_OF
+ * @alias HAS_CHILD
+ * @source * A person may be recorded as parent of any number of children.
+ * @target ..2 A child has at most two recorded parents, so at most two
+ *   incoming PARENT_OF relationships end at any one person.
+ */
+[:PARENT_OF | (parent:Person), (child:Person)]
+
+// `..1` on the source: each person has at most one outgoing REPORTS_TO.
+/**
+ * REPORTS_TO
+ *
+ * @label REPORTS_TO
+ * @property since When the reporting line started.
+ * @source ..1 Each person has at most one manager.
+ * @target * A manager may have any number of direct reports.
+ */
+[:REPORTS_TO {since: date} | (report:Person), (manager:Person)]
+
+/**
+ * Un lien de parenté.
+ *
+ * @label PARENT_OF Un parent d'une personne.
+ * @source * Une personne peut être le parent d'un nombre quelconque d'enfants.
+ * @target ..2 Un enfant a au plus deux parents enregistrés.
+ */
+[:French | [:PARENT_OF | (parent:Person), (child:Person)]]
+```
+
 `/**/` is not a doc comment (the host grammar treats it as an empty plain block, if at all).
 
 ## Using it from a host grammar
