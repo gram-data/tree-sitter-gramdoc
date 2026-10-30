@@ -296,7 +296,7 @@ Relationship source and target
       (description_line)
       (description_line))))
 
-================================================================================
+===========================================================================================================================================================
 Cardinality forms
 ================================================================================
 
@@ -305,15 +305,20 @@ Cardinality forms
  * @source ? Optional.
  * @source + At least one.
  * @source * Any number.
- * @target {3} Exactly three.
- * @target {2,5} Between two and five.
- * @target {2,} At least two.
+ * @source 3 Exactly three.
+ * @target 2..5 Between two and five.
+ * @target 2.. At least two.
+ * @target ..4 At most four.
  * @target *
  */
 
 --------------------------------------------------------------------------------
 
 (document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
   (source_tag
     cardinality: (cardinality)
     description: (tag_description
@@ -344,6 +349,69 @@ Cardinality forms
       (description_line)))
   (target_tag
     cardinality: (cardinality)))
+
+================================================================================
+Cardinality with n greater than m still parses
+================================================================================
+
+/**
+ * @source 5..2 Backwards range.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Description after cardinality may start with a dot or digits
+================================================================================
+
+/**
+ * @source 1 ...and more.
+ * @source + 2 people at most.
+ * @target 1.. 3rd party.
+ * @target ..2 .hidden
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Spaces around the range dots are not part of the cardinality
+================================================================================
+
+/**
+ * @source 1 .. 2 spaced
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line))))
 
 ================================================================================
 Single-line source with cardinality only

@@ -111,9 +111,9 @@ export default grammar({
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    // 1, ?, +, *, {n}, {n,m}, {n,}. Higher precedence so a bare `*` is not
+    // n, n..m, n.., ..m, ?, +, *. Higher precedence so a bare `*` is not
     // consumed as the leading-asterisk extra.
-    cardinality: _ => token(prec(1, /1|\?|\+|\*|\{[0-9]+(,[0-9]*)?\}/)),
+    cardinality: _ => token(prec(1, /[0-9]+(\.\.[0-9]*)?|\.\.[0-9]+|\?|\+|\*/)),
 
     alias: _ => LINE,
 
