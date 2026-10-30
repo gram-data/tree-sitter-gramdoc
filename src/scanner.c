@@ -6,9 +6,17 @@
 enum TokenType { NAME };
 
 void *tree_sitter_gramdoc_external_scanner_create(void) { return NULL; }
-void tree_sitter_gramdoc_external_scanner_destroy(void *payload) {}
-unsigned tree_sitter_gramdoc_external_scanner_serialize(void *payload, char *buffer) { return 0; }
-void tree_sitter_gramdoc_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {}
+void tree_sitter_gramdoc_external_scanner_destroy(void *payload) { (void)payload; }
+unsigned tree_sitter_gramdoc_external_scanner_serialize(void *payload, char *buffer) {
+  (void)payload;
+  (void)buffer;
+  return 0;
+}
+void tree_sitter_gramdoc_external_scanner_deserialize(void *payload, const char *buffer, unsigned length) {
+  (void)payload;
+  (void)buffer;
+  (void)length;
+}
 
 static bool is_space(int32_t c) { return c == ' ' || c == '\t' || c == '\r' || c == '\n'; }
 static bool is_ident_start(int32_t c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'; }
@@ -17,6 +25,7 @@ static bool is_ident(int32_t c) { return is_ident_start(c) || (c >= '0' && c <= 
 // Scans `name`: an identifier that is alone on its line, directly after the
 // opening `/**` (skipping whitespace and leading `*` decoration).
 bool tree_sitter_gramdoc_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+  (void)payload;
   if (!valid_symbols[NAME]) return false;
 
   for (;;) {
