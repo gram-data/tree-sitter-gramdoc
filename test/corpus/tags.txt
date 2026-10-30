@@ -1,0 +1,201 @@
+================================================================================
+Property tag (English Person example)
+================================================================================
+
+/**
+ * A human individual.
+ *
+ * @property name The full name of the person.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Property tag (French Person example)
+================================================================================
+
+/**
+ * Un être humain.
+ *
+ * @property name Le nom complet de la personne.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Property tag without description
+================================================================================
+
+/**
+ * @property name
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    name: (identifier)))
+
+================================================================================
+Property tag with multi-line description
+================================================================================
+
+/**
+ * @property name The full name
+ *   of the person,
+ *   as written on a passport.
+ * @property age Age in years.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line)
+      (description_line)
+      (description_line)))
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Alias tags
+================================================================================
+
+/**
+ * A human individual.
+ *
+ * @alias Human
+ * @alias human being
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (alias_tag
+    value: (alias))
+  (alias_tag
+    value: (alias)))
+
+================================================================================
+Reference tag
+================================================================================
+
+/**
+ * @reference https://schema.org/Person
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (reference_tag
+    target: (reference_target)))
+
+================================================================================
+Reference tag with description
+================================================================================
+
+/**
+ * @reference https://schema.org/Person Same concept in schema.org.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (reference_tag
+    target: (reference_target)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Unknown tags
+================================================================================
+
+/**
+ * @since 1.2
+ * @deprecated
+ * @see-also Organization
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (unknown_tag
+    name: (tag_name)
+    description: (tag_description
+      (description_line)))
+  (unknown_tag
+    name: (tag_name))
+  (unknown_tag
+    name: (tag_name)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+All parts together
+================================================================================
+
+/**
+ * Person
+ *
+ * A human individual.
+ *
+ * @property name The full name of the person.
+ * @alias Human
+ * @reference https://schema.org/Person
+ * @since 0.1
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (description
+    (description_line))
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line)))
+  (alias_tag
+    value: (alias))
+  (reference_tag
+    target: (reference_target))
+  (unknown_tag
+    name: (tag_name)
+    description: (tag_description
+      (description_line))))
+
+================================================================================
+Single-line tag
+================================================================================
+
+/** @property name The full name. */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    name: (identifier)
+    description: (tag_description
+      (description_line))))

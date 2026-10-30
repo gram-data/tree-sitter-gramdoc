@@ -1,0 +1,34 @@
+{
+  "name": "tree-sitter-gramdoc",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for gramdoc structured documentation comments in gram",
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "Andreas Kollegger",
+    "email": "andreas.kollegger@neo4j.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gram-data/tree-sitter-gramdoc.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "gramdoc",
+    "gram",
+    "parser"
+  ],
+  "files": [
+    "grammar.js",
+    "tree-sitter.json",
+    "queries/*",
+    "src/**"
+  ],
+  "scripts": {
+    "build": "tree-sitter generate",
+    "test": "tree-sitter test"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.26.5"
+  }
+}
