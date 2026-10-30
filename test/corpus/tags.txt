@@ -273,8 +273,8 @@ Relationship source and target
  * A person knows another person.
  *
  * @label KNOWS
- * @source 1..* Each :KNOWS may start at one or more people.
- * @target 0..1 Each :KNOWS ends at
+ * @source + Each :KNOWS may start at one or more people.
+ * @target ? Each :KNOWS ends at
  *   at most one person.
  */
 
@@ -301,11 +301,13 @@ Cardinality forms
 ================================================================================
 
 /**
- * @source 1 One.
- * @source 0..1 Optional.
- * @source 1..* At least one.
+ * @source 1 Exactly one.
+ * @source ? Optional.
+ * @source + At least one.
  * @source * Any number.
- * @target 2..5 Between two and five.
+ * @target {3} Exactly three.
+ * @target {2,5} Between two and five.
+ * @target {2,} At least two.
  * @target *
  */
 
@@ -333,6 +335,14 @@ Cardinality forms
     description: (tag_description
       (description_line)))
   (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
     cardinality: (cardinality)))
 
 ================================================================================
@@ -346,3 +356,24 @@ Single-line source with cardinality only
 (document
   (source_tag
     cardinality: (cardinality)))
+
+================================================================================
+Cardinality is separate from a punctuated description
+================================================================================
+
+/**
+ * @source 1 (the author) writes it.
+ * @target {1,2}: see notes
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (source_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line)))
+  (target_tag
+    cardinality: (cardinality)
+    description: (tag_description
+      (description_line))))

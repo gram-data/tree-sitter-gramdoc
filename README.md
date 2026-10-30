@@ -38,8 +38,8 @@ A relationship, documented by its ends:
  * A person knows another person.
  *
  * @label KNOWS
- * @source 1..* Each :KNOWS may start at one or more people.
- * @target 0..1 Each :KNOWS ends at at most one person.
+ * @source + Each :KNOWS may start at one or more people.
+ * @target ? Each :KNOWS ends at at most one person.
  */
 [:KNOWS | (a:Person), (b:Person)]
 ```
@@ -71,7 +71,34 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 | `@target <cardinality> [description]` | `target_tag` | Target end of a relationship. Same shape as `@source`. |
 | `@<other> [description]` | `unknown_tag` | Any other tag. Fields: `name` (`tag_name`, includes the `@`), `description`. |
 
-**Cardinality** is `1`, `0..1`, `1..*`, `*` or `n..m` (digits, e.g. `2..5`), the number of instances at that end that can relate to one instance at the other end. The grammar only recognises the form; it does not check `n <= m`. The description after it is optional.
+**Cardinality** is one of:
+
+| Form | Meaning |
+|------|---------|
+| `1` | exactly one |
+| `?` | zero or one |
+| `+` | one or more |
+| `*` | zero or more (unconstrained) |
+| `{n}` | exactly n |
+| `{n,m}` | between n and m |
+| `{n,}` | at least n |
+
+Braces take digits only, with no spaces (`{2,5}`, not `{2, 5}`). The grammar does not check `n <= m`. The description after it is optional.
+
+**Semantics.** The cardinality at an end is the number of relationships of this kind *per node at that end*, not the number of nodes at the other end. This matches the end `count` / `min_count` / `max_count` of the [Neo4j ontology-graph-spec](https://github.com/neo4j/ontology-graph-spec) relationship (`@source` is `from`, `@target` is `to`), and is the **reverse of UML multiplicity**. For `[:ACTED_IN | person, movie]`:
+
+```gram
+/**
+ * ACTED_IN
+ *
+ * @source * A person may act in any number of movies.
+ * @target + Every movie has at least one incoming ACTED_IN.
+ */
+```
+
+`@target +` is `to: {node: movie, min_count: 1}` in the ontology spec.
+
+The first token after `@source` or `@target` is always the cardinality; the description is whatever follows it, so a description may start with punctuation (`@source 1 (the author) ...`). A cardinality directly followed by text with no space (`1st`) is read as `1` plus description `st`.
 
 Tag descriptions continue over following lines until the next `@` tag or the end of the comment. Tags have no `{type}` and no `-` separator.
 
