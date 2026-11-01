@@ -1,6 +1,6 @@
 {
   "name": "@gram-data/tree-sitter-gramdoc",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Tree-sitter grammar for gramdoc structured documentation comments in gram",
   "homepage": "https://github.com/gram-data/tree-sitter-gramdoc",
   "repository": {

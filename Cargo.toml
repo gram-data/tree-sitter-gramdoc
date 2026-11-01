@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-gramdoc"
 description = "Structured documentation comments for gram"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Andreas Kollegger <andreas.kollegger@neo4j.com>"]
 license = "MIT"
 keywords = ["incremental", "parsing", "tree-sitter", "gramdoc", "gram"]
