@@ -23,7 +23,7 @@
  * Un être humain.
  *
  * @language "fr"
- * @property name "nom": Le nom complet de la personne. ("anon")
+ * @property name "nom": Le nom complet de la personne. (@aliases: "anon")
  */
 (Person)
 ```
@@ -45,7 +45,7 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 |------|------|-------------|
 | name | `name` | Optional. An identifier **alone** on the first line (`Person`). `Person.` or `A person` is a description instead. |
 | description | `description` | Free prose, one `description_line` per line. Blank lines are skipped, not represented. Plain text, no Markdown semantics. |
-| `@property <name> ["term"[:]] [description] [("alias", ...)]` | `property_tag` | Documents a property of the element, in the shape of a dictionary entry: `@property name "nom": The full name. ("anon", "anonyme")`. The optional quoted `term` is the property's localized name; a `:` right after it is allowed and skipped. A trailing list of quoted strings is the property's aliases. A quote or parenthetical anywhere else is description text: `Note: ...`, `(see below)` and a closing Markdown link stay in the description. Aliases end the tag. Fields: `name` (`identifier`), `term` (`term`, quotes included), `description` (`tag_description`), `aliases` (`aliases`, the raw `("a", "b")` text, quotes included). |
+| `@property <name> ["term"[:]] [description] [(@key value)...]` | `property_tag` | Documents a property of the element, in the shape of a dictionary entry: `@property name "nom": The full name. (@aliases: "anon", "anonyme")`. The optional quoted `term` is the property's localized name; a `:` right after it is allowed and skipped. Trailing `(@key value)` groups are attributes. A quote or parenthetical anywhere else is description text: `Note: ...`, `(see below)` and a closing Markdown link stay in the description. Fields: `name` (`identifier`), `term` (`term`, quotes included), `description` (`tag_description`), `attribute` (repeatable, see below). |
 | `@label <name> [description]` | `label_tag` | Documents a label of the subject. Fields: `name` (`identifier`), `description`. |
 | `@alias <text>` | `alias_tag` | One alternative name per tag; the value is the rest of the line, spaces allowed. Field: `value` (`alias`). |
 | `@reference <target> [description]` | `reference_tag` | An external reference. `target` is one whitespace-free token (URL, IRI, CURIE…). Fields: `target` (`reference_target`), `description`. |
@@ -53,6 +53,8 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 | `@element [description]` | `element_tag` | Repeatable. The nth `@element` documents the nth element, by order of appearance; there is no addressing token. A count mismatch is not a parse error. Field: `description`. |
 | `@language <code>` | `language_tag` | The language of the whole comment: `"fr"` or bare `fr`, `pt-BR`. Field: `value` (`language`). |
 | `@<other> [description]` | `unknown_tag` | Any other tag. Fields: `name` (`tag_name`, includes the `@`), `description`. |
+
+**Attributes.** An attribute is a parenthesized group `(@key value)` or `(@key: value)` at the end of a `@property` tag, after the description. It has a `key` (`attribute_key`, no `@`) and an optional `value` (`attribute_value`): the raw text up to the closing `)`, with an optional `:` after the key skipped. Nested parentheses must balance, so `(@see [guide](https://example.com/a_(1)))` works. A group may span lines, and several may follow one another. gramdoc does not define any key; `aliases`, `see` and the rest are conventions between authors and consumers, and a consumer may read a value as gram scalars such as `"anon", "anonyme"`. A `(@` group that is not the last thing on its line is description text, and text after an attribute on a later line is a parse error: attributes end their tag.
 
 **Markdown.** The `description` and every tag description are CommonMark. The grammar does not parse it: each line is a `description_line` whose range excludes the comment decoration, so a consumer joins the lines (a skipped blank line is the gap between two ranges) and hands them to a Markdown parser. `queries/injections.scm` injects Markdown line by line for inline highlighting. The `term`, the `aliases`, `@alias` and the name are plain text. Three limits come from the comment form:
 

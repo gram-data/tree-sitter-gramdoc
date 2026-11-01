@@ -16,6 +16,32 @@
     }
   },
   {
+    "type": "attribute",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "attribute_key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "attribute_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "description",
     "named": true,
     "fields": {},
@@ -160,12 +186,12 @@
     "type": "property_tag",
     "named": true,
     "fields": {
-      "aliases": {
-        "multiple": false,
+      "attribute": {
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "aliases",
+            "type": "attribute",
             "named": true
           }
         ]
@@ -270,6 +296,10 @@
     }
   },
   {
+    "type": ")",
+    "named": false
+  },
+  {
     "type": "*/",
     "named": false
   },
@@ -310,7 +340,11 @@
     "named": true
   },
   {
-    "type": "aliases",
+    "type": "attribute_key",
+    "named": true
+  },
+  {
+    "type": "attribute_value",
     "named": true
   },
   {

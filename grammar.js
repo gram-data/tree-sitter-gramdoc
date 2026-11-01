@@ -13,7 +13,8 @@ module.exports = grammar({
   externals: $ => [
     $.name,
     $.term,
-    $.aliases,
+    $._attribute_open,
+    $.attribute_value,
     $._property_line,
     $._colon,
   ],
@@ -51,16 +52,27 @@ module.exports = grammar({
       $.unknown_tag,
     ),
 
-    // @property <name> ["term"[:]] <description> [("alias", "alias")]
-    // The term, the description lines and the alias list are produced by
-    // src/scanner.c, which keeps a trailing alias list out of the description.
+    // @property <name> ["term"[:]] <description> [(@key value)...]
+    // The term, the description lines and the attribute groups are produced
+    // by src/scanner.c, which keeps trailing groups out of the description.
     property_tag: $ => seq(
       '@property',
       field('name', $.identifier),
       optional(seq(field('term', $.term), optional($._colon))),
       optional(field('description', alias($._property_description, $.tag_description))),
-      optional(field('aliases', $.aliases)),
+      repeat(field('attribute', $.attribute)),
     ),
+
+    // `(@aliases: "anon", "anonyme")`, `(@see [guide](https://example.com))`.
+    // The value is raw text; its meaning is up to the consumer.
+    attribute: $ => seq(
+      $._attribute_open,
+      field('key', $.attribute_key),
+      optional(field('value', $.attribute_value)),
+      ')',
+    ),
+
+    attribute_key: _ => /[a-zA-Z_][a-zA-Z0-9_-]*/,
 
     _property_description: $ => repeat1(alias($._property_line, $.description_line)),
 

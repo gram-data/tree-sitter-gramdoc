@@ -450,11 +450,11 @@ Term with a colon
       (description_line))))
 
 ================================================================================
-Term, colon and trailing aliases
+Term, colon and trailing attribute
 ================================================================================
 
 /**
- * @property name "nom": The full name of the person. ("anon", "anonyme")
+ * @property name "nom": The full name of the person. (@aliases: "anon", "anonyme")
  */
 
 --------------------------------------------------------------------------------
@@ -465,13 +465,15 @@ Term, colon and trailing aliases
     (term)
     (tag_description
       (description_line))
-    (aliases)))
+    (attribute
+      (attribute_key)
+      (attribute_value))))
 
 ================================================================================
-Aliases without a description
+Attribute without a description
 ================================================================================
 
-/** @property name "nom" ("anon") */
+/** @property name "nom" (@aliases: "anon") */
 
 --------------------------------------------------------------------------------
 
@@ -479,14 +481,16 @@ Aliases without a description
   (property_tag
     (identifier)
     (term)
-    (aliases)))
+    (attribute
+      (attribute_key)
+      (attribute_value))))
 
 ================================================================================
-Aliases without a term
+Attribute without a term
 ================================================================================
 
 /**
- * @property name The full name. ("anon")
+ * @property name The full name. (@aliases: "anon")
  */
 
 --------------------------------------------------------------------------------
@@ -496,16 +500,18 @@ Aliases without a term
     (identifier)
     (tag_description
       (description_line))
-    (aliases)))
+    (attribute
+      (attribute_key)
+      (attribute_value))))
 
 ================================================================================
-Aliases alone on the last line of a multi-line description
+Attribute alone on the last line of a multi-line description
 ================================================================================
 
 /**
  * @property name "nom": The full name,
  *   as the person writes it.
- *   ("anon", "anonyme")
+ *   (@aliases: "anon", "anonyme")
  * @property age "âge"
  */
 
@@ -518,13 +524,15 @@ Aliases alone on the last line of a multi-line description
     (tag_description
       (description_line)
       (description_line))
-    (aliases))
+    (attribute
+      (attribute_key)
+      (attribute_value)))
   (property_tag
     (identifier)
     (term)))
 
 ================================================================================
-A trailing parenthetical that is not an alias list is description text
+A trailing parenthetical that is not an attribute is description text
 ================================================================================
 
 /**
@@ -594,3 +602,91 @@ Markdown emphasis and bullets in a property description
       (description_line)
       (description_line)
       (description_line))))
+
+================================================================================
+Several attributes, with a Markdown link and nested parentheses
+================================================================================
+
+/**
+ * @property name "nom": The full name. (@aliases: "anon") (@see [guide](https://example.com/a_(1)))
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (term)
+    (tag_description
+      (description_line))
+    (attribute
+      (attribute_key)
+      (attribute_value))
+    (attribute
+      (attribute_key)
+      (attribute_value))))
+
+================================================================================
+Attribute without a value
+================================================================================
+
+/** @property name (@internal) */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (attribute
+      (attribute_key))))
+
+================================================================================
+Attribute spanning lines
+================================================================================
+
+/**
+ * @property name "nom"
+ *   (@aliases: "anon",
+ *     "anonyme")
+ * @property id
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (term)
+    (attribute
+      (attribute_key)
+      (attribute_value)))
+  (property_tag
+    (identifier)))
+
+================================================================================
+Attribute in the middle of text is description
+================================================================================
+
+/**
+ * @property name The full name (@aliases: "anon") as written.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Text after an attribute on a later line is an error
+:error
+================================================================================
+
+/**
+ * @property name The full name (@aliases: "anon")
+ *   and more.
+ */
+
+--------------------------------------------------------------------------------

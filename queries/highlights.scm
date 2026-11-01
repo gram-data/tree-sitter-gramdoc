@@ -15,7 +15,8 @@
 (property_tag name: (identifier) @variable.parameter)
 (label_tag name: (identifier) @type)
 (term) @string
-(aliases) @string
+(attribute_key) @attribute
+(attribute_value) @string
 (language) @string.special
 (alias) @string
 (reference_target) @string.special

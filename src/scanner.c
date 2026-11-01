@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-enum TokenType { NAME, TERM, ALIASES, PROPERTY_LINE, COLON };
+enum TokenType { NAME, TERM, ATTRIBUTE_OPEN, ATTRIBUTE_VALUE, PROPERTY_LINE, COLON };
 
 void *tree_sitter_gramdoc_external_scanner_create(void) { return NULL; }
 void tree_sitter_gramdoc_external_scanner_destroy(void *payload) { (void)payload; }
@@ -61,34 +61,12 @@ static void skip_blanks(TSLexer *lexer) {
   }
 }
 
-// At `(`: consumes a parenthesized list of quoted strings that ends its line,
-// `("a", "b")`. On failure the lexer is left at the first character that did
-// not fit, which is not consumed. With `mark`, the token end is set right
-// after the `)`.
-static bool scan_aliases(TSLexer *lexer, bool mark) {
-  lexer->advance(lexer, false);
-  for (;;) {
-    skip_blanks(lexer);
-    if (lexer->lookahead != '"') return false;
-    lexer->advance(lexer, false);
-    while (lexer->lookahead != '"') {
-      if (lexer->lookahead == '\n' || lexer->eof(lexer)) return false;
-      lexer->advance(lexer, false);
-    }
-    lexer->advance(lexer, false);
-    skip_blanks(lexer);
-    if (lexer->lookahead == ',') {
-      lexer->advance(lexer, false);
-    } else if (lexer->lookahead == ')') {
-      lexer->advance(lexer, false);
-      break;
-    } else {
-      return false;
-    }
-  }
-  if (mark) lexer->mark_end(lexer);
+// After a group (and blanks): true at the end of the line or before `*/`, so
+// the group is the last thing on its line. Anything after it on a later line
+// is not description text any more: attributes end their tag.
+static bool at_line_end(TSLexer *lexer) {
   skip_blanks(lexer);
-  if (lexer->lookahead == '\n' || lexer->eof(lexer)) return true;
+  if (lexer->eof(lexer) || lexer->lookahead == '\n') return true;
   if (lexer->lookahead == '*') {
     lexer->advance(lexer, false);
     return lexer->lookahead == '/';
@@ -96,12 +74,76 @@ static bool scan_aliases(TSLexer *lexer, bool mark) {
   return false;
 }
 
+// At `(`: true when a run of `(@key ...)` groups starts here and is the last
+// thing on its line. A group may span lines; nested parentheses must balance,
+// so Markdown links fit inside. With `mark`, the token end is set right after
+// `(@`. On failure the lexer is left at the first character that did not fit,
+// which is not consumed.
+static bool scan_attributes(TSLexer *lexer, bool mark) {
+  for (;;) {
+    lexer->advance(lexer, false);
+    if (lexer->lookahead != '@') return false;
+    lexer->advance(lexer, false);
+    if (mark) {
+      lexer->mark_end(lexer);
+      mark = false;
+    }
+    if (!is_ident_start(lexer->lookahead)) return false;
+    int depth = 1;
+    while (depth > 0) {
+      if (lexer->eof(lexer)) return false;
+      if (lexer->lookahead == '(') depth++;
+      if (lexer->lookahead == ')') depth--;
+      if (lexer->lookahead == '*') {
+        lexer->advance(lexer, false);
+        if (lexer->lookahead == '/') return false;
+        continue;
+      }
+      lexer->advance(lexer, false);
+    }
+    skip_blanks(lexer);
+    if (lexer->lookahead != '(') return at_line_end(lexer);
+  }
+}
+
+// Scans the value of an attribute: everything after the key (and an optional
+// `:`) up to the `)` that closes the group, nested parentheses included.
+static bool scan_attribute_value(TSLexer *lexer) {
+  for (;;) {
+    if (is_space(lexer->lookahead)) lexer->advance(lexer, true);
+    else break;
+  }
+  if (lexer->lookahead == ':') {
+    lexer->advance(lexer, true);
+    while (is_space(lexer->lookahead)) lexer->advance(lexer, true);
+  }
+  bool has_text = false;
+  int depth = 0;
+  while (!lexer->eof(lexer)) {
+    int32_t c = lexer->lookahead;
+    if (c == '(') depth++;
+    if (c == ')') {
+      if (depth == 0) break;
+      depth--;
+    }
+    lexer->advance(lexer, false);
+    if (!is_space(c)) {
+      has_text = true;
+      lexer->mark_end(lexer);
+    }
+  }
+  if (!has_text) return false;
+  lexer->result_symbol = ATTRIBUTE_VALUE;
+  return true;
+}
+
 // Scans the pieces of a `@property` tag after its name:
 //   TERM           a quoted localized term, `"nom"`
 //   COLON          an optional `:` right after the term
 //   PROPERTY_LINE  description text to the end of the line, stopping before a
-//                  trailing alias list and before `*/`
-//   ALIASES        a trailing list of quoted strings, `("anon", "anonyme")`
+//                  trailing attribute group and before `*/`
+//   ATTRIBUTE_OPEN the `(@` that starts a trailing `(@key value)` group
+//   ATTRIBUTE_VALUE the raw value inside such a group
 // One leading `*` per line is comment decoration; any further `*` is text, so
 // Markdown bullets and emphasis survive.
 static bool scan_property(TSLexer *lexer, const bool *valid_symbols) {
@@ -146,8 +188,8 @@ static bool scan_property(TSLexer *lexer, const bool *valid_symbols) {
     lexer->mark_end(lexer);
   }
 
-  if (valid_symbols[ALIASES] && !has_text && lexer->lookahead == '(' && scan_aliases(lexer, true)) {
-    lexer->result_symbol = ALIASES;
+  if (valid_symbols[ATTRIBUTE_OPEN] && !has_text && lexer->lookahead == '(' && scan_attributes(lexer, true)) {
+    lexer->result_symbol = ATTRIBUTE_OPEN;
     return true;
   }
   if (!valid_symbols[PROPERTY_LINE]) return false;
@@ -160,8 +202,8 @@ static bool scan_property(TSLexer *lexer, const bool *valid_symbols) {
       if (lexer->lookahead == '/') break;
       has_text = true;
       lexer->mark_end(lexer);
-    } else if (c == '(' && valid_symbols[ALIASES]) {
-      if (scan_aliases(lexer, false)) {
+    } else if (c == '(' && valid_symbols[ATTRIBUTE_OPEN]) {
+      if (scan_attributes(lexer, false)) {
         if (!has_text) return false;
         break;
       }
@@ -183,9 +225,10 @@ static bool scan_property(TSLexer *lexer, const bool *valid_symbols) {
 bool tree_sitter_gramdoc_external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
   (void)payload;
   // During error recovery every symbol is valid; stay out of it.
-  if (valid_symbols[NAME] && valid_symbols[ALIASES]) return false;
+  if (valid_symbols[NAME] && valid_symbols[ATTRIBUTE_OPEN]) return false;
   if (valid_symbols[NAME]) return scan_name(lexer);
-  if (valid_symbols[TERM] || valid_symbols[COLON] || valid_symbols[ALIASES] || valid_symbols[PROPERTY_LINE]) {
+  if (valid_symbols[ATTRIBUTE_VALUE]) return scan_attribute_value(lexer);
+  if (valid_symbols[TERM] || valid_symbols[COLON] || valid_symbols[ATTRIBUTE_OPEN] || valid_symbols[PROPERTY_LINE]) {
     return scan_property(lexer, valid_symbols);
   }
   return false;
