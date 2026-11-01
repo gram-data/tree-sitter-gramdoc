@@ -133,12 +133,29 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "term",
-              "content": {
-                "type": "SYMBOL",
-                "name": "term"
-              }
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "term",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "term"
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "_colon"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -152,8 +169,29 @@
               "type": "FIELD",
               "name": "description",
               "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_property_description"
+                },
+                "named": true,
+                "value": "tag_description"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "aliases",
+              "content": {
                 "type": "SYMBOL",
-                "name": "tag_description"
+                "name": "aliases"
               }
             },
             {
@@ -162,6 +200,18 @@
           ]
         }
       ]
+    },
+    "_property_description": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "ALIAS",
+        "content": {
+          "type": "SYMBOL",
+          "name": "_property_line"
+        },
+        "named": true,
+        "value": "description_line"
+      }
     },
     "label_tag": {
       "type": "SEQ",
@@ -353,17 +403,6 @@
       "type": "PATTERN",
       "value": "[a-zA-Z_][a-zA-Z0-9_]*"
     },
-    "term": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PREC",
-        "value": 1,
-        "content": {
-          "type": "PATTERN",
-          "value": "\"[^\"\\n]*\""
-        }
-      }
-    },
     "language": {
       "type": "TOKEN",
       "content": {
@@ -404,6 +443,22 @@
     {
       "type": "SYMBOL",
       "name": "name"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "term"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "aliases"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_property_line"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_colon"
     }
   ],
   "inline": [],

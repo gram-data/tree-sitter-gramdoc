@@ -160,6 +160,16 @@
     "type": "property_tag",
     "named": true,
     "fields": {
+      "aliases": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "aliases",
+            "named": true
+          }
+        ]
+      },
       "description": {
         "multiple": false,
         "required": false,
@@ -297,6 +307,10 @@
   },
   {
     "type": "alias",
+    "named": true
+  },
+  {
+    "type": "aliases",
     "named": true
   },
   {

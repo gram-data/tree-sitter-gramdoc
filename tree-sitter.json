@@ -9,7 +9,8 @@
       "file-types": [],
       "injection-regex": "gramdoc",
       "highlights": "queries/highlights.scm",
-      "tags": "queries/tags.scm"
+      "tags": "queries/tags.scm",
+      "injections": "queries/injections.scm"
     }
   ],
   "metadata": {

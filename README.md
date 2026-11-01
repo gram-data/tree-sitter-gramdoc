@@ -23,7 +23,7 @@
  * Un être humain.
  *
  * @language "fr"
- * @property name "nom" Le nom complet de la personne.
+ * @property name "nom": Le nom complet de la personne. ("anon")
  */
 (Person)
 ```
@@ -45,7 +45,7 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 |------|------|-------------|
 | name | `name` | Optional. An identifier **alone** on the first line (`Person`). `Person.` or `A person` is a description instead. |
 | description | `description` | Free prose, one `description_line` per line. Blank lines are skipped, not represented. Plain text, no Markdown semantics. |
-| `@property <name> ["term"] [description]` | `property_tag` | Documents a property of the element. The optional quoted `term` is the property's localized name (`@property name "nom" The full name.`). A quote later in the description is plain text. Fields: `name` (`identifier`), `term` (`term`), `description` (`tag_description`). |
+| `@property <name> ["term"[:]] [description] [("alias", ...)]` | `property_tag` | Documents a property of the element, in the shape of a dictionary entry: `@property name "nom": The full name. ("anon", "anonyme")`. The optional quoted `term` is the property's localized name; a `:` right after it is allowed and skipped. A trailing list of quoted strings is the property's aliases. A quote or parenthetical anywhere else is description text: `Note: ...`, `(see below)` and a closing Markdown link stay in the description. Aliases end the tag. Fields: `name` (`identifier`), `term` (`term`, quotes included), `description` (`tag_description`), `aliases` (`aliases`, the raw `("a", "b")` text, quotes included). |
 | `@label <name> [description]` | `label_tag` | Documents a label of the subject. Fields: `name` (`identifier`), `description`. |
 | `@alias <text>` | `alias_tag` | One alternative name per tag; the value is the rest of the line, spaces allowed. Field: `value` (`alias`). |
 | `@reference <target> [description]` | `reference_tag` | An external reference. `target` is one whitespace-free token (URL, IRI, CURIE…). Fields: `target` (`reference_target`), `description`. |
@@ -53,6 +53,12 @@ The parser input is the whole `/** ... */` text. A leading `*` on each line is w
 | `@element [description]` | `element_tag` | Repeatable. The nth `@element` documents the nth element, by order of appearance; there is no addressing token. A count mismatch is not a parse error. Field: `description`. |
 | `@language <code>` | `language_tag` | The language of the whole comment: `"fr"` or bare `fr`, `pt-BR`. Field: `value` (`language`). |
 | `@<other> [description]` | `unknown_tag` | Any other tag. Fields: `name` (`tag_name`, includes the `@`), `description`. |
+
+**Markdown.** The `description` and every tag description are CommonMark. The grammar does not parse it: each line is a `description_line` whose range excludes the comment decoration, so a consumer joins the lines (a skipped blank line is the gap between two ranges) and hands them to a Markdown parser. `queries/injections.scm` injects Markdown line by line for inline highlighting. The `term`, the `aliases`, `@alias` and the name are plain text. Three limits come from the comment form:
+
+ * The decoration is one `*` plus whitespace at the start of a line; any further `*` is text, so ` * * item` is a bullet and ` * **bold**` is emphasis. A bare `* item` on a line with no decoration loses its bullet.
+ * `*/` ends the comment and cannot be written, even in a code span.
+ * A line that starts with `@` starts a tag, so a Markdown `@mention` cannot begin a line.
 
 Tag descriptions continue over following lines until the next `@` tag or the end of the comment. Tags have no `{type}` and no `-` separator.
 
@@ -96,7 +102,8 @@ The npm package is `@gram-data/tree-sitter-gramdoc`; the crate is `tree-sitter-g
 
 ## Queries
 
-- `queries/highlights.scm`: name, tag keywords, property names, aliases, reference targets, descriptions.
+- `queries/highlights.scm`: name, tag keywords, property names and terms, aliases, reference targets, descriptions.
+- `queries/injections.scm`: Markdown in description lines.
 - `queries/tags.scm`: `@definition.doc` (name), `@definition.property`, `@definition.alias`, `@reference.reference`, each with a `@name` capture.
 
 ## Development

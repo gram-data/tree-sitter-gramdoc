@@ -12,6 +12,10 @@ module.exports = grammar({
 
   externals: $ => [
     $.name,
+    $.term,
+    $.aliases,
+    $._property_line,
+    $._colon,
   ],
 
   extras: $ => [
@@ -47,13 +51,18 @@ module.exports = grammar({
       $.unknown_tag,
     ),
 
-    // @property <name> ["localized term"] <description>
+    // @property <name> ["term"[:]] <description> [("alias", "alias")]
+    // The term, the description lines and the alias list are produced by
+    // src/scanner.c, which keeps a trailing alias list out of the description.
     property_tag: $ => seq(
       '@property',
       field('name', $.identifier),
-      optional(field('term', $.term)),
-      optional(field('description', $.tag_description)),
+      optional(seq(field('term', $.term), optional($._colon))),
+      optional(field('description', alias($._property_description, $.tag_description))),
+      optional(field('aliases', $.aliases)),
     ),
+
+    _property_description: $ => repeat1(alias($._property_line, $.description_line)),
 
     // @label <name> <description>
     label_tag: $ => seq(
@@ -102,10 +111,6 @@ module.exports = grammar({
     tag_description: $ => repeat1($.description_line),
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-
-    // A quoted localized name. Higher precedence so it wins over a
-    // description line that happens to start with a quote.
-    term: _ => token(prec(1, /"[^"\n]*"/)),
 
     // A language code: `"fr"`, or bare `fr`, `pt-BR`.
     language: _ => token(prec(1, /"[^"\n]*"|[a-zA-Z][a-zA-Z0-9-]*/)),
