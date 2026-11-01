@@ -264,7 +264,145 @@ Elements is not confused with element
       (description_line))))
 
 ================================================================================
-Relationship source and target
+Language tag with a quoted code
+================================================================================
+
+/**
+ * Un être humain.
+ *
+ * @language "fr"
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (description
+    (description_line))
+  (language_tag
+    (language)))
+
+================================================================================
+Language tag with a bare code
+================================================================================
+
+/** @language pt-BR */
+
+--------------------------------------------------------------------------------
+
+(document
+  (language_tag
+    (language)))
+
+================================================================================
+Language tag applies alongside property tags
+================================================================================
+
+/**
+ * Person
+ *
+ * @language "fr"
+ * @property name "nom" Le nom complet de la personne.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (name)
+  (language_tag
+    (language))
+  (property_tag
+    (identifier)
+    (term)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Property tag with a localized term
+================================================================================
+
+/**
+ * @property name "nom" The full name.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (term)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Property tag with a localized term and no description
+================================================================================
+
+/** @property name "nom" */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (term)))
+
+================================================================================
+Property tag with a term containing spaces
+================================================================================
+
+/** @property birthDate "date de naissance" When the person was born. */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (term)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Quote later in the description is not a term
+================================================================================
+
+/**
+ * @property name The full name, "nom" in French.
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (property_tag
+    (identifier)
+    (tag_description
+      (description_line))))
+
+================================================================================
+Source, target and self are now unknown tags
+================================================================================
+
+/**
+ * @source * Any number.
+ * @target ? At most one.
+ * @self
+ */
+
+--------------------------------------------------------------------------------
+
+(document
+  (unknown_tag
+    (tag_name)
+    (tag_description
+      (description_line)))
+  (unknown_tag
+    (tag_name)
+    (tag_description
+      (description_line)))
+  (unknown_tag
+    (tag_name)))
+
+================================================================================
+Relationship documented by position
 ================================================================================
 
 /**
@@ -273,9 +411,9 @@ Relationship source and target
  * A person knows another person.
  *
  * @label KNOWS
- * @source + Each :KNOWS may start at one or more people.
- * @target ? Each :KNOWS ends at
- *   at most one person.
+ * @elements The two acquainted people.
+ * @element The person who recorded the acquaintance.
+ * @element The person who is known.
  */
 
 --------------------------------------------------------------------------------
@@ -285,163 +423,13 @@ Relationship source and target
   (description
     (description_line))
   (label_tag
-    name: (identifier))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
+    (identifier))
+  (elements_tag
+    (tag_description
       (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)
-      (description_line))))
-
-===========================================================================================================================================================
-Cardinality forms
-================================================================================
-
-/**
- * @source 1 Exactly one.
- * @source ? Optional.
- * @source + At least one.
- * @source * Any number.
- * @source 3 Exactly three.
- * @target 2..5 Between two and five.
- * @target 2.. At least two.
- * @target ..4 At most four.
- * @target *
- */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
+  (element_tag
+    (tag_description
       (description_line)))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)))
-
-================================================================================
-Cardinality with n greater than m still parses
-================================================================================
-
-/**
- * @source 5..2 Backwards range.
- */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line))))
-
-================================================================================
-Description after cardinality may start with a dot or digits
-================================================================================
-
-/**
- * @source 1 ...and more.
- * @source + 2 people at most.
- * @target 1.. 3rd party.
- * @target ..2 .hidden
- */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line))))
-
-================================================================================
-Spaces around the range dots are not part of the cardinality
-================================================================================
-
-/**
- * @source 1 .. 2 spaced
- */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line))))
-
-================================================================================
-Single-line source with cardinality only
-================================================================================
-
-/** @source 1 */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)))
-
-================================================================================
-Cardinality is separate from a punctuated description
-================================================================================
-
-/**
- * @source 1 (the author) writes it.
- * @target ..2: see notes
- */
-
---------------------------------------------------------------------------------
-
-(document
-  (source_tag
-    cardinality: (cardinality)
-    description: (tag_description
-      (description_line)))
-  (target_tag
-    cardinality: (cardinality)
-    description: (tag_description
+  (element_tag
+    (tag_description
       (description_line))))

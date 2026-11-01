@@ -12,6 +12,3 @@
 
 ; External references
 (reference_tag target: (reference_target) @name) @reference.reference
-
-; Self-loop marker
-(self_tag) @definition.self

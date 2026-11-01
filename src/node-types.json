@@ -60,6 +60,10 @@
           "named": true
         },
         {
+          "type": "language_tag",
+          "named": true
+        },
+        {
           "type": "name",
           "named": true
         },
@@ -69,18 +73,6 @@
         },
         {
           "type": "reference_tag",
-          "named": true
-        },
-        {
-          "type": "self_tag",
-          "named": true
-        },
-        {
-          "type": "source_tag",
-          "named": true
-        },
-        {
-          "type": "target_tag",
           "named": true
         },
         {
@@ -149,6 +141,22 @@
     }
   },
   {
+    "type": "language_tag",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "language",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "property_tag",
     "named": true,
     "fields": {
@@ -168,6 +176,16 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "term": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "term",
             "named": true
           }
         ]
@@ -201,32 +219,6 @@
     }
   },
   {
-    "type": "source_tag",
-    "named": true,
-    "fields": {
-      "cardinality": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "cardinality",
-            "named": true
-          }
-        ]
-      },
-      "description": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "tag_description",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "tag_description",
     "named": true,
     "fields": {},
@@ -239,32 +231,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "target_tag",
-    "named": true,
-    "fields": {
-      "cardinality": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "cardinality",
-            "named": true
-          }
-        ]
-      },
-      "description": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "tag_description",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -318,6 +284,10 @@
     "named": false
   },
   {
+    "type": "@language",
+    "named": false
+  },
+  {
     "type": "@property",
     "named": false
   },
@@ -326,19 +296,7 @@
     "named": false
   },
   {
-    "type": "@source",
-    "named": false
-  },
-  {
-    "type": "@target",
-    "named": false
-  },
-  {
     "type": "alias",
-    "named": true
-  },
-  {
-    "type": "cardinality",
     "named": true
   },
   {
@@ -350,6 +308,10 @@
     "named": true
   },
   {
+    "type": "language",
+    "named": true
+  },
+  {
     "type": "name",
     "named": true
   },
@@ -358,11 +320,11 @@
     "named": true
   },
   {
-    "type": "self_tag",
+    "type": "tag_name",
     "named": true
   },
   {
-    "type": "tag_name",
+    "type": "term",
     "named": true
   }
 ]

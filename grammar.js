@@ -42,17 +42,16 @@ module.exports = grammar({
       $.alias_tag,
       $.elements_tag,
       $.element_tag,
-      $.source_tag,
-      $.target_tag,
-      $.self_tag,
+      $.language_tag,
       $.reference_tag,
       $.unknown_tag,
     ),
 
-    // @property <name> <description>
+    // @property <name> ["localized term"] <description>
     property_tag: $ => seq(
       '@property',
       field('name', $.identifier),
+      optional(field('term', $.term)),
       optional(field('description', $.tag_description)),
     ),
 
@@ -88,22 +87,11 @@ module.exports = grammar({
       optional(field('description', $.tag_description)),
     ),
 
-    // @source <cardinality> <description>
-    source_tag: $ => seq(
-      '@source',
-      field('cardinality', $.cardinality),
-      optional(field('description', $.tag_description)),
+    // @language <code>: applies to the whole comment; `"fr"` or `fr`
+    language_tag: $ => seq(
+      '@language',
+      field('value', $.language),
     ),
-
-    // @target <cardinality> <description>
-    target_tag: $ => seq(
-      '@target',
-      field('cardinality', $.cardinality),
-      optional(field('description', $.tag_description)),
-    ),
-
-    // @self: bare marker, no argument or description
-    self_tag: _ => '@self',
 
     // @anything <description>
     unknown_tag: $ => seq(
@@ -115,9 +103,12 @@ module.exports = grammar({
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    // n, n..m, n.., ..m, ?, +, *. Higher precedence so a bare `*` is not
-    // consumed as the leading-asterisk extra.
-    cardinality: _ => token(prec(1, /[0-9]+(\.\.[0-9]*)?|\.\.[0-9]+|\?|\+|\*/)),
+    // A quoted localized name. Higher precedence so it wins over a
+    // description line that happens to start with a quote.
+    term: _ => token(prec(1, /"[^"\n]*"/)),
+
+    // A language code: `"fr"`, or bare `fr`, `pt-BR`.
+    language: _ => token(prec(1, /"[^"\n]*"|[a-zA-Z][a-zA-Z0-9-]*/)),
 
     alias: _ => LINE,
 

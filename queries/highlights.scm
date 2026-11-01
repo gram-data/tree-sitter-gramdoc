@@ -7,16 +7,15 @@
 "@label" @keyword
 "@elements" @keyword
 "@element" @keyword
-"@source" @keyword
-"@target" @keyword
-(self_tag) @keyword
+"@language" @keyword
 "@reference" @keyword
 (tag_name) @keyword
 
 ; Tag arguments
 (property_tag name: (identifier) @variable.parameter)
 (label_tag name: (identifier) @type)
-(cardinality) @number
+(term) @string
+(language) @string.special
 (alias) @string
 (reference_target) @string.special
 
